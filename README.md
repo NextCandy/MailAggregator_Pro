@@ -1,6 +1,6 @@
 # MailAggregator Pro
 
-多邮箱 IMAP 聚合 + 规则打标签 + Telegram 推送的小控制台。
+多邮箱 IMAP 聚合 + 规则打标签 + Telegram 推送
 
 ---
 
