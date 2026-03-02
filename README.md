@@ -191,14 +191,9 @@ mail-tool/
 
 如果这个项目对你有帮助，欢迎请作者喝杯咖啡。
 
-- 联系方式（TG）：`@YOUR_TG_USERNAME`
-- 支持方式：USDT / ETH（可自行选择网络：ETH / BSC / Polygon 等）
-- 收款地址：`YOUR_WALLET_ADDRESS`
+- 联系方式（Telegram）：`https://t.me/yam_zhi`
+- 支持方式：USDT（TRC20网络）
+- 收款地址：`TNNpwNCYiYp8ZfpE28C8TJ3gY6ZXVA1Fnf`
 
-（可选）二维码：将二维码图片放到仓库中（例如 `docs/donate.png`），并在这里引用：
-
-```md
-![donate](docs/donate.png)
-```
 
 
