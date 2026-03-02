@@ -2,6 +2,8 @@
 
 多邮箱 IMAP 聚合 + 规则打标签 + Telegram 推送
 
+作者：[@gblaowang-i](https://github.com/gblaowang-i)
+
 ---
 
 ## 技术栈（简要）
@@ -176,4 +178,11 @@ mail-tool/
 
   - 备份 Docker 卷 `mail-tool-data`（数据库）。
   - 备份 `.env` 或你在部署环境里设置的关键环境变量（尤其是 `ENCRYPTION_KEY`、`JWT_SECRET`）。
+
+---
+
+## License
+
+本项目采用 MIT 协议开源，详见仓库根目录的 `LICENSE` 文件。
+
 
