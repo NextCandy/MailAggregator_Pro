@@ -35,6 +35,8 @@ export const AccountList = ({ selectedAccountId, onSelectAccount }: Props) => {
   const [draggingId, setDraggingId] = useState<number | null>(null);
   const [checkedIds, setCheckedIds] = useState<Set<number>>(new Set());
   const [bulkAction, setBulkAction] = useState<string | null>(null);
+  const [brandFilter, setBrandFilter] = useState<string>("");
+  const [accountSearch, setAccountSearch] = useState("");
   const selectAllRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState<CreateAccountPayload & { telegram_push_enabled?: boolean; push_template?: string; poll_interval_seconds?: number | null }>({
@@ -100,7 +102,20 @@ export const AccountList = ({ selectedAccountId, onSelectAccount }: Props) => {
     return <span style={{ marginLeft: 4 }}>{sortDir === "asc" ? "↑" : "↓"}</span>;
   };
 
-  const sortedAccounts = sortKey === "manual" ? accounts : [...accounts].sort((a, b) => {
+  const filteredAccounts = useMemo(() => {
+    let list = accounts;
+    if (brandFilter) {
+      list = list.filter((a) => (a.provider || "custom") === brandFilter);
+    }
+    if (accountSearch.trim()) {
+      list = list.filter((a) =>
+        a.email.toLowerCase().includes(accountSearch.trim().toLowerCase())
+      );
+    }
+    return list;
+  }, [accounts, brandFilter, accountSearch]);
+
+  const sortedAccounts = sortKey === "manual" ? filteredAccounts : [...filteredAccounts].sort((a, b) => {
     const dir = sortDir === "asc" ? 1 : -1;
 
     const getLastOk = (id: number) => {
@@ -386,6 +401,41 @@ export const AccountList = ({ selectedAccountId, onSelectAccount }: Props) => {
           <p className="card-subtitle">在这里管理你要监控的邮箱账号</p>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center", justifyContent: "flex-end" }}>
+          <select
+            value={brandFilter}
+            onChange={(e) => setBrandFilter(e.target.value)}
+            style={{
+              padding: "0.35rem 0.5rem",
+              borderRadius: "0.5rem",
+              border: "1px solid var(--input-border)",
+              background: "var(--input-bg)",
+              color: "var(--text)",
+              fontSize: "0.8rem",
+              minWidth: 100
+            }}
+          >
+            <option value="">全部品牌</option>
+            {MAIL_PROVIDERS.map((p) => (
+              <option key={p.key} value={p.key}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            placeholder="搜索账号"
+            value={accountSearch}
+            onChange={(e) => setAccountSearch(e.target.value)}
+            style={{
+              padding: "0.35rem 0.5rem",
+              borderRadius: "0.5rem",
+              border: "1px solid var(--input-border)",
+              background: "var(--input-bg)",
+              color: "var(--text)",
+              fontSize: "0.8rem",
+              width: 120
+            }}
+          />
           <span className="muted" style={{ fontSize: "0.8rem" }}>
             已选择 <b>{checkedList.length}</b> 项
           </span>
@@ -471,7 +521,14 @@ export const AccountList = ({ selectedAccountId, onSelectAccount }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {sortedAccounts.map((acc) => (
+            {sortedAccounts.length === 0 ? (
+              <tr>
+                <td colSpan={10} className="muted" style={{ textAlign: "center", padding: "1.5rem" }}>
+                  筛选后无结果
+                </td>
+              </tr>
+            ) : (
+            sortedAccounts.map((acc) => (
               (() => {
                 let providerKeyForRow: MailProviderKey =
                   (acc.provider as MailProviderKey) || "custom";
@@ -647,7 +704,8 @@ export const AccountList = ({ selectedAccountId, onSelectAccount }: Props) => {
                   </>
                 );
               })()
-            ))}
+            ))
+            )}
           </tbody>
         </table>
       )}
